@@ -2,28 +2,16 @@ import React, { PureComponent } from "react";
 import "./header.scss";
 
 export default class Header extends PureComponent {
-  state = {
-    value: "",
-  };
-
   keyEnter = 13;
 
-  onInputChange = (evt) => {
-    const newValue = evt.target.value;
-    this.setState({
-      value: newValue,
-    });
-  };
-
   onInputEnter = (evt) => {
+    const validateValue = evt.target.value.trim().replace(/\s+/g, " ");
     if (
       (evt.keyCode === this.keyEnter || evt.type === "blur") &&
-      evt.target.value
+      validateValue
     ) {
-      this.props.addTodo(this.state.value);
-      this.setState({
-        value: "",
-      });
+      this.props.addTodo(validateValue);
+      evt.target.value = "";
     }
   };
 
@@ -41,8 +29,6 @@ export default class Header extends PureComponent {
           className="todo-header__input"
           type="text"
           placeholder="Что вы хотите сделать?"
-          value={this.state.value}
-          onChange={this.onInputChange}
           onBlur={this.onInputEnter}
           onKeyDown={this.onInputEnter}
         />

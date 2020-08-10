@@ -13,6 +13,7 @@ export default class App extends PureComponent {
       this.createTodo("Lay"),
       this.createTodo("Stay at home"),
     ],
+    filter: "all",
   };
 
   createTodo(title) {
@@ -22,6 +23,25 @@ export default class App extends PureComponent {
       completed: false,
     };
   }
+
+  chengeFilter = (filter) => {
+    this.setState({
+      filter: filter,
+    });
+  };
+
+  filterTodos = (todos, filter) => {
+    switch (filter) {
+      case "all":
+        return todos;
+      case "active":
+        return todos.filter((it) => !it.completed);
+      case "completed":
+        return todos.filter((it) => it.completed);
+      default:
+        return todos;
+    }
+  };
 
   deleteTodo = (id) => {
     this.setState(({ todosArray }) => {
@@ -63,20 +83,26 @@ export default class App extends PureComponent {
   };
 
   render() {
-    const { todosArray } = this.state;
+    const { todosArray, filter } = this.state;
     const activeTodoCount = todosArray.filter((it) => it.completed === false)
       .length;
+    const visibleTodos = this.filterTodos(todosArray, filter);
     return (
       <div className="todo-app">
         <Header addTodo={this.addTodo} />
         <main>
           <TodoList
-            todosArray={todosArray}
+            todosArray={visibleTodos}
             selectTodo={this.selectTodo}
             deleteTodo={this.deleteTodo}
           />
         </main>
-        <Footer active={activeTodoCount} allTodos={todosArray.length} />
+        <Footer
+          active={activeTodoCount}
+          allTodos={todosArray.length}
+          changeFilter={this.chengeFilter}
+          filter={filter}
+        />
       </div>
     );
   }

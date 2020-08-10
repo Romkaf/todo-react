@@ -2,19 +2,31 @@ import React, { Component } from "react";
 import "./filter.scss";
 
 export default class Filter extends Component {
+  buttons = [
+    { title: "Все", filter: "all" },
+    { title: "Активные", filter: "active" },
+    { title: "Завершенные", filter: "completed" },
+  ];
+
+  // onFilterClick=()=> {
+
+  // }
   render() {
-    return (
-      <div className="filter">
-        <button type="button" className="filter__btn filter__btn--active">
-          Все
+    const { changeFilter, filter } = this.props;
+    const buttons = this.buttons.map((it) => {
+      const klass = it.filter === filter ? "filter__btn--active" : "";
+      return (
+        <button
+          className={`filter__btn ${klass}`}
+          type="button"
+          key={it.filter}
+          onClick={() => changeFilter(it.filter)}
+        >
+          {it.title}
         </button>
-        <button type="button" className="filter__btn">
-          Активные
-        </button>
-        <button type="button" className="filter__btn">
-          Завершенные
-        </button>
-      </div>
-    );
+      );
+    });
+
+    return <div className="filter">{buttons}</div>;
   }
 }
