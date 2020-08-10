@@ -1,0 +1,94 @@
+@import "../../scss/variables.scss";
+@import "../../scss/mixins.scss";
+
+.todo-item {
+  position: relative;
+  border-bottom: 1px solid $lighter-black;
+
+  &:hover .todo-item__delete {
+    opacity: 1;
+    transition: color ease-in-out 0.1s;
+
+    @include hoverSupport {
+      color: $dark-red;
+      transition: color ease-in-out 0.1s;
+    }
+  }
+
+  &--completed .todo-item__task {
+    opacity: 0.2;
+    text-decoration: line-through;
+    transition: ease-in-out 0.3s;
+  }
+
+  &--editing {
+    .todo-item__task {
+      width: calc(100% - 46px);
+      margin-left: 45px;
+      padding-left: 15px;
+      opacity: 1;
+      box-shadow: inset 0 0 3px 1px $black;
+      text-decoration: none;
+    }
+  }
+
+  &__choice {
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+    transform: translateY(-50%);
+
+    & + label {
+      position: absolute;
+      top: 50%;
+      left: 7px;
+      width: 28px;
+      height: 28px;
+      border: 1px solid $lighter-black;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 0;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    &:checked + label {
+      font-size: 26px;
+      line-height: 28px;
+      color: $green;
+      border-color: $light-black;
+    }
+  }
+
+  &__task {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    padding-right: 40px;
+    padding-left: 60px;
+    opacity: 1;
+    font-size: 1.6em;
+    line-height: 1.4em;
+    word-wrap: break-word;
+    background: none;
+    text-decoration: none;
+    transition: ease-in-out 0.3s;
+  }
+
+  &__delete {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    font-weight: 900;
+    color: $red;
+    transform: translateY(-50%);
+  }
+}
