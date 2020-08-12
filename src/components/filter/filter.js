@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import "./filter.scss";
 
-export default class Filter extends Component {
+export default class Filter extends PureComponent {
   buttons = [
     { title: "Все", filter: "all" },
     { title: "Активные", filter: "active" },

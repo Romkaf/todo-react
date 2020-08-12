@@ -8,11 +8,7 @@ export default class App extends PureComponent {
   id = 1;
 
   state = {
-    todosArray: [
-      this.createTodo("Play in footbal"),
-      this.createTodo("Lay"),
-      this.createTodo("Stay at home"),
-    ],
+    todosArray: [],
     filter: "all",
   };
 
@@ -43,6 +39,16 @@ export default class App extends PureComponent {
     }
   };
 
+  addTodo = (text) => {
+    const newTodo = this.createTodo(text);
+    this.setState(({ todosArray }) => {
+      const newArray = [...todosArray, newTodo];
+      return {
+        todosArray: newArray,
+      };
+    });
+  };
+
   deleteTodo = (id) => {
     this.setState(({ todosArray }) => {
       const index = todosArray.findIndex((it) => it.id === id);
@@ -50,6 +56,15 @@ export default class App extends PureComponent {
         ...todosArray.slice(0, index),
         ...todosArray.slice(index + 1),
       ];
+      return {
+        todosArray: newArray,
+      };
+    });
+  };
+
+  deleteCompletedTodo = () => {
+    this.setState(({ todosArray }) => {
+      const newArray = todosArray.filter((it) => it.completed === false);
       return {
         todosArray: newArray,
       };
@@ -72,10 +87,34 @@ export default class App extends PureComponent {
     });
   };
 
-  addTodo = (text) => {
-    const newTodo = this.createTodo(text);
+  editTodo = (id, text) => {
     this.setState(({ todosArray }) => {
-      const newArray = [...todosArray, newTodo];
+      const index = todosArray.findIndex((it) => it.id === id);
+      const oldItem = todosArray[index];
+      const newItem = { ...oldItem, title: text };
+      const newArray = [
+        ...todosArray.slice(0, index),
+        newItem,
+        ...todosArray.slice(index + 1),
+      ];
+      return {
+        todosArray: newArray,
+      };
+    });
+  };
+
+  selectAllTodo = () => {
+    this.setState(({ todosArray }) => {
+      let newArray;
+      if (todosArray.every((it) => it.completed === true)) {
+        newArray = todosArray.map((it) =>
+          Object.assign(it, { completed: false })
+        );
+      } else {
+        newArray = todosArray.map((it) =>
+          Object.assign(it, { completed: true })
+        );
+      }
       return {
         todosArray: newArray,
       };
@@ -86,22 +125,30 @@ export default class App extends PureComponent {
     const { todosArray, filter } = this.state;
     const activeTodoCount = todosArray.filter((it) => it.completed === false)
       .length;
+    const completedTodoCount = todosArray.length - activeTodoCount;
     const visibleTodos = this.filterTodos(todosArray, filter);
     return (
       <div className="todo-app">
-        <Header addTodo={this.addTodo} />
+        <Header
+          addTodo={this.addTodo}
+          todosArray={todosArray}
+          selectAll={this.selectAllTodo}
+        />
         <main>
           <TodoList
             todosArray={visibleTodos}
             selectTodo={this.selectTodo}
             deleteTodo={this.deleteTodo}
+            editTodo={this.editTodo}
           />
         </main>
         <Footer
           active={activeTodoCount}
+          completed={completedTodoCount}
           allTodos={todosArray.length}
           changeFilter={this.chengeFilter}
           filter={filter}
+          deleteCompleted={this.deleteCompletedTodo}
         />
       </div>
     );
