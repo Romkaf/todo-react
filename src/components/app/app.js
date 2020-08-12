@@ -9,13 +9,14 @@ export default class App extends PureComponent {
 
   state = {
     todosArray: [],
+    // id: this.todosArray ? this.todosArray.length + 1 : 1,
     filter: "all",
   };
 
   createTodo(title) {
     return {
       title,
-      id: this.id++,
+      id: this.state.todosArray ? this.state.todosArray.length + 1 : this.id++,
       completed: false,
     };
   }
@@ -121,12 +122,42 @@ export default class App extends PureComponent {
     });
   };
 
+  setLocalStorage = (stateName) => {
+    const todos = JSON.stringify(stateName);
+    localStorage.setItem("todos", todos);
+  };
+
+  loadLocalStorage = () => {
+    const todos = JSON.parse(localStorage.getItem("todos"))
+      ? JSON.parse(localStorage.getItem("todos"))
+      : [];
+
+    this.setState({
+      todosArray: todos,
+    });
+  };
+
+  componentDidMount() {
+    this.loadLocalStorage();
+    console.log(this.state.todosArray);
+    console.log(this.id);
+  }
+
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
+    this.setLocalStorage(nextState.todosArray);
+  }
+
+  // getSnapshotBeforeUpdate() {
+  //   this.setLocalStorage(this.state.todosArray);
+  // }
+
   render() {
     const { todosArray, filter } = this.state;
     const activeTodoCount = todosArray.filter((it) => it.completed === false)
       .length;
     const completedTodoCount = todosArray.length - activeTodoCount;
     const visibleTodos = this.filterTodos(todosArray, filter);
+    // this.setLocalStorage();
     return (
       <div className="todo-app">
         <Header
