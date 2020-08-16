@@ -24,7 +24,7 @@ export default class Header extends PureComponent {
       : "";
     return (
       <header className="todo-header">
-        <h1 className="todo-header__title">Todo</h1>
+        <h1 className="todo-header__title">ToDo</h1>
         <input
           className="todo-header__choice-all"
           id="choice-all"
@@ -42,7 +42,7 @@ export default class Header extends PureComponent {
         <input
           className="todo-header__input"
           type="text"
-          placeholder="Что вы хотите сделать?"
+          placeholder="Что надо сделать?"
           onBlur={this.todoInputHandler}
           onKeyDown={this.todoInputHandler}
         />
