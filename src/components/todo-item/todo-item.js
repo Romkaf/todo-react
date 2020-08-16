@@ -22,17 +22,27 @@ export default class TodoItem extends PureComponent {
   };
 
   finishTodoEditing = (evt) => {
-    if (evt.keyCode === 13 || evt.type === "blur") {
+    if (evt.keyCode === 13 || evt.type === "blur" || evt.keyCode === 27) {
       const input = evt.target;
-      this.props.editTodo(input.value.trim().replace(/\s+/g, " "));
+      if (this.state.visibilityElement === "visible") return;
+      const insertText =
+        evt.keyCode === 27
+          ? this.props.title
+          : input.value.trim().replace(/\s+/g, " ");
+      this.setState({ visibilityElement: "visible" });
+      if (this.deleteEmptyTask(evt, insertText)) return;
+      this.props.editTodo(insertText);
       input.parentNode.classList.remove("todo-item--editing");
       input.nextElementSibling.classList.remove("hidden");
-      this.setState({ visibilityElement: "visible" });
-      try {
-        input.remove();
-      } catch (error) {
-        return;
-      }
+      input.remove();
+    }
+  };
+
+  deleteEmptyTask = (evt, insertText) => {
+    if (!insertText) {
+      evt.target.parentNode.remove();
+      this.props.deleteTodo();
+      return "return";
     }
   };
 

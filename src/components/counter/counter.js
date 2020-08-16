@@ -1,10 +1,10 @@
 import React from "react";
 import "./counter.scss";
 
-const Counter = ({ active }) => {
+const Counter = ({ activeTodosAmount }) => {
   return (
     <span className="counter">
-      Осталось заданий:<b>{active}</b>
+      Осталось заданий:<b>{activeTodosAmount}</b>
     </span>
   );
 };

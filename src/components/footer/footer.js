@@ -7,20 +7,20 @@ import BtnClearCompleted from "../btn-clear-completed/btn-clear-completed";
 export default class Footer extends PureComponent {
   render() {
     const {
-      active,
-      completed,
-      allTodos,
+      activeTodosAmount,
+      completedTodosAmount,
+      allTodosAmount,
       changeFilter,
       filter,
       deleteCompleted,
     } = this.props;
-    const klass = allTodos > 0 ? "" : "hidden";
+    const klass = allTodosAmount > 0 ? "" : "hidden";
     return (
       <footer className={`todo-footer ${klass}`}>
-        <Counter active={active} />
+        <Counter activeTodosAmount={activeTodosAmount} />
         <Filter changeFilter={changeFilter} filter={filter} />
         <BtnClearCompleted
-          completed={completed}
+          completedTodosAmount={completedTodosAmount}
           deleteCompleted={deleteCompleted}
         />
       </footer>

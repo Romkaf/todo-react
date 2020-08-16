@@ -8,9 +8,6 @@ export default class Filter extends PureComponent {
     { title: "Завершенные", filter: "completed" },
   ];
 
-  // onFilterClick=()=> {
-
-  // }
   render() {
     const { changeFilter, filter } = this.props;
     const buttons = this.buttons.map((it) => {

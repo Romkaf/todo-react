@@ -5,23 +5,22 @@ import Footer from "../footer/footer";
 import "./app.scss";
 
 export default class App extends PureComponent {
-  id = 1;
-
   state = {
     todosArray: [],
-    // id: this.todosArray ? this.todosArray.length + 1 : 1,
     filter: "all",
   };
+
+  id = 1;
 
   createTodo(title) {
     return {
       title,
-      id: this.state.todosArray ? this.state.todosArray.length + 1 : this.id++,
+      id: this.id++,
       completed: false,
     };
   }
 
-  chengeFilter = (filter) => {
+  changeFilter = (filter) => {
     this.setState({
       filter: filter,
     });
@@ -72,34 +71,26 @@ export default class App extends PureComponent {
     });
   };
 
+  changePropertyTodo = (array, id, property, text) => {
+    const index = array.findIndex((it) => it.id === id);
+    const oldItem = array[index];
+    const propertyValue = property === "completed" ? !oldItem[property] : text;
+    const newItem = { ...oldItem, [property]: propertyValue };
+    return [...array.slice(0, index), newItem, ...array.slice(index + 1)];
+  };
+
   selectTodo = (id) => {
     this.setState(({ todosArray }) => {
-      const index = todosArray.findIndex((it) => it.id === id);
-      const oldItem = todosArray[index];
-      const newItem = { ...oldItem, completed: !oldItem.completed };
-      const newArray = [
-        ...todosArray.slice(0, index),
-        newItem,
-        ...todosArray.slice(index + 1),
-      ];
       return {
-        todosArray: newArray,
+        todosArray: this.changePropertyTodo(todosArray, id, "completed"),
       };
     });
   };
 
   editTodo = (id, text) => {
     this.setState(({ todosArray }) => {
-      const index = todosArray.findIndex((it) => it.id === id);
-      const oldItem = todosArray[index];
-      const newItem = { ...oldItem, title: text };
-      const newArray = [
-        ...todosArray.slice(0, index),
-        newItem,
-        ...todosArray.slice(index + 1),
-      ];
       return {
-        todosArray: newArray,
+        todosArray: this.changePropertyTodo(todosArray, id, "title", text),
       };
     });
   };
@@ -139,17 +130,13 @@ export default class App extends PureComponent {
 
   componentDidMount() {
     this.loadLocalStorage();
-    console.log(this.state.todosArray);
-    console.log(this.id);
   }
 
-  UNSAFE_componentWillUpdate(nextProps, nextState) {
-    this.setLocalStorage(nextState.todosArray);
+  componentDidUpdate() {
+    const todos = this.state.todosArray;
+    this.setLocalStorage(todos);
+    this.id = todos.length === 0 ? 1 : todos[todos.length - 1].id + 1;
   }
-
-  // getSnapshotBeforeUpdate() {
-  //   this.setLocalStorage(this.state.todosArray);
-  // }
 
   render() {
     const { todosArray, filter } = this.state;
@@ -157,7 +144,6 @@ export default class App extends PureComponent {
       .length;
     const completedTodoCount = todosArray.length - activeTodoCount;
     const visibleTodos = this.filterTodos(todosArray, filter);
-    // this.setLocalStorage();
     return (
       <div className="todo-app">
         <Header
@@ -174,10 +160,10 @@ export default class App extends PureComponent {
           />
         </main>
         <Footer
-          active={activeTodoCount}
-          completed={completedTodoCount}
-          allTodos={todosArray.length}
-          changeFilter={this.chengeFilter}
+          activeTodosAmount={activeTodoCount}
+          completedTodosAmount={completedTodoCount}
+          allTodosAmount={todosArray.length}
+          changeFilter={this.changeFilter}
           filter={filter}
           deleteCompleted={this.deleteCompletedTodo}
         />
