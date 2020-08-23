@@ -1,5 +1,6 @@
 import React from "react";
 import TodoItem from "../todo-item/todo-item";
+import PropTypes from "prop-types";
 import "./todo-list.scss";
 
 const TodoList = ({ todosArray, selectTodo, deleteTodo, editTodo }) => {
@@ -20,3 +21,10 @@ const TodoList = ({ todosArray, selectTodo, deleteTodo, editTodo }) => {
 };
 
 export default TodoList;
+
+TodoList.propTypes = {
+  todosArray: PropTypes.array,
+  deleteTodo: PropTypes.func,
+  editTodo: PropTypes.func,
+  selectAll: PropTypes.func,
+};

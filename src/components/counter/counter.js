@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./counter.scss";
 
 const Counter = ({ activeTodosAmount }) => {
@@ -10,3 +11,7 @@ const Counter = ({ activeTodosAmount }) => {
 };
 
 export default Counter;
+
+Counter.propTypes = {
+  activeTodosAmount: PropTypes.number,
+};

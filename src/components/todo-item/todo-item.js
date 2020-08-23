@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import "./todo-item.scss";
 
 export default class TodoItem extends PureComponent {
@@ -78,3 +79,11 @@ export default class TodoItem extends PureComponent {
     );
   }
 }
+
+TodoItem.propTypes = {
+  title: PropTypes.string,
+  completed: PropTypes.bool,
+  deleteTodo: PropTypes.func,
+  editTodo: PropTypes.func,
+  selectAll: PropTypes.func,
+};

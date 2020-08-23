@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import "./header.scss";
 
 export default class Header extends PureComponent {
@@ -50,3 +51,9 @@ export default class Header extends PureComponent {
     );
   }
 }
+
+Header.propTypes = {
+  addTodo: PropTypes.func,
+  todosArray: PropTypes.array,
+  selectAll: PropTypes.func,
+};

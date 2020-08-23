@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import "./filter.scss";
 
 export default class Filter extends PureComponent {
@@ -27,3 +28,8 @@ export default class Filter extends PureComponent {
     return <div className="filter">{buttons}</div>;
   }
 }
+
+Filter.propTypes = {
+  changeFilter: PropTypes.func,
+  filter: PropTypes.string,
+};

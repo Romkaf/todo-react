@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import "./footer.scss";
 import Counter from "../counter/counter";
 import Filter from "../filter/filter";
@@ -27,3 +28,12 @@ export default class Footer extends PureComponent {
     );
   }
 }
+
+Footer.propTypes = {
+  completedTodosAmount: PropTypes.number,
+  allTodosAmount: PropTypes.number,
+  activeTodosAmount: PropTypes.number,
+  changeFilter: PropTypes.func,
+  filter: PropTypes.string,
+  deleteCompleted: PropTypes.func,
+};
