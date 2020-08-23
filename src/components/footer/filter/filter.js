@@ -13,6 +13,7 @@ export default class Filter extends PureComponent {
     const { changeFilter, filter } = this.props;
     const buttons = this.buttons.map((it) => {
       const klass = it.filter === filter ? "filter__btn--active" : "";
+
       return (
         <button
           className={`filter__btn ${klass}`}

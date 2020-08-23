@@ -8,7 +8,7 @@ export default class Header extends PureComponent {
   todoInputHandler = (evt) => {
     const validateValue = evt.target.value.trim().replace(/\s+/g, " ");
     if (
-      (evt.keyCode === this.keyEnter || evt.type === "blur") &&
+      (evt.keyCode === keyCode.ENTER || evt.type === "blur") &&
       validateValue
     ) {
       this.props.addTodo(validateValue);
@@ -19,10 +19,9 @@ export default class Header extends PureComponent {
   render() {
     const { todosArray, selectAll } = this.props;
     const visibility = todosArray.length > 0 ? "visible" : "hidden";
-    const opacity = todosArray.every((it) => it.completed === true) ? 1 : 0.2;
-    const checked = todosArray.every((it) => it.completed === true)
-      ? "ckecked"
-      : "";
+    const opacity = todosArray.every((it) => it.completed) ? 1 : 0.2;
+    const checked = todosArray.every((it) => it.completed) ? "ckecked" : "";
+
     return (
       <header className="todo-header">
         <h1 className="todo-header__title">ToDo</h1>
@@ -51,6 +50,11 @@ export default class Header extends PureComponent {
     );
   }
 }
+
+export const keyCode = {
+  ENTER: 13,
+  ESC: 27,
+};
 
 Header.propTypes = {
   addTodo: PropTypes.func,

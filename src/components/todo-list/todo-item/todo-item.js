@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import "./todo-item.scss";
+import { keyCode } from "../../header/header";
 
 export default class TodoItem extends PureComponent {
   state = {
@@ -23,11 +24,15 @@ export default class TodoItem extends PureComponent {
   };
 
   finishTodoEditing = (evt) => {
-    if (evt.keyCode === 13 || evt.type === "blur" || evt.keyCode === 27) {
+    if (
+      evt.keyCode === keyCode.ENTER ||
+      evt.type === "blur" ||
+      evt.keyCode === keyCode.ESC
+    ) {
       const input = evt.target;
       if (this.state.visibilityElement === "visible") return;
       const insertText =
-        evt.keyCode === 27
+        evt.keyCode === keyCode.ESC
           ? this.props.title
           : input.value.trim().replace(/\s+/g, " ");
       this.setState({ visibilityElement: "visible" });

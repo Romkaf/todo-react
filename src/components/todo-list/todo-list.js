@@ -1,7 +1,6 @@
 import React from "react";
-import TodoItem from "../todo-item/todo-item";
+import TodoItem from "./todo-item/todo-item";
 import PropTypes from "prop-types";
-import "./todo-list.scss";
 
 const TodoList = ({ todosArray, selectTodo, deleteTodo, editTodo }) => {
   const todos = todosArray.map((it) => {
@@ -17,6 +16,7 @@ const TodoList = ({ todosArray, selectTodo, deleteTodo, editTodo }) => {
       </li>
     );
   });
+
   return <ul className="todo-list">{todos}</ul>;
 };
 

@@ -42,47 +42,37 @@ export default class App extends PureComponent {
   addTodo = (text) => {
     const newTodo = this.createTodo(text);
     this.setState(({ todosArray }) => {
-      const newArray = [...todosArray, newTodo];
       return {
-        todosArray: newArray,
+        todosArray: [...todosArray, newTodo],
       };
     });
   };
 
   deleteTodo = (id) => {
     this.setState(({ todosArray }) => {
-      const index = todosArray.findIndex((it) => it.id === id);
-      const newArray = [
-        ...todosArray.slice(0, index),
-        ...todosArray.slice(index + 1),
-      ];
       return {
-        todosArray: newArray,
+        todosArray: todosArray.filter((it) => !(it.id === id)),
       };
     });
   };
 
   deleteCompletedTodo = () => {
     this.setState(({ todosArray }) => {
-      const newArray = todosArray.filter((it) => it.completed === false);
       return {
-        todosArray: newArray,
+        todosArray: todosArray.filter((it) => !it.completed),
       };
     });
-  };
-
-  changePropertyTodo = (array, id, property, text) => {
-    const index = array.findIndex((it) => it.id === id);
-    const oldItem = array[index];
-    const propertyValue = property === "completed" ? !oldItem[property] : text;
-    const newItem = { ...oldItem, [property]: propertyValue };
-    return [...array.slice(0, index), newItem, ...array.slice(index + 1)];
   };
 
   selectTodo = (id) => {
     this.setState(({ todosArray }) => {
       return {
-        todosArray: this.changePropertyTodo(todosArray, id, "completed"),
+        todosArray: todosArray.map((it) => {
+          if (it.id === id) {
+            it.completed = !it.completed;
+          }
+          return it;
+        }),
       };
     });
   };
@@ -90,7 +80,12 @@ export default class App extends PureComponent {
   editTodo = (id, text) => {
     this.setState(({ todosArray }) => {
       return {
-        todosArray: this.changePropertyTodo(todosArray, id, "title", text),
+        todosArray: todosArray.map((it) => {
+          if (it.id === id) {
+            it.title = text;
+          }
+          return it;
+        }),
       };
     });
   };
@@ -114,17 +109,12 @@ export default class App extends PureComponent {
   };
 
   setLocalStorage = (stateName) => {
-    const todos = JSON.stringify(stateName);
-    localStorage.setItem("todos", todos);
+    localStorage.setItem("todos", JSON.stringify(stateName));
   };
 
   loadLocalStorage = () => {
-    const todos = JSON.parse(localStorage.getItem("todos"))
-      ? JSON.parse(localStorage.getItem("todos"))
-      : [];
-
     this.setState({
-      todosArray: todos,
+      todosArray: JSON.parse(localStorage.getItem("todos")) || [],
     });
   };
 
@@ -133,9 +123,10 @@ export default class App extends PureComponent {
   }
 
   componentDidUpdate() {
-    const todos = this.state.todosArray;
-    this.setLocalStorage(todos);
-    this.id = todos.length === 0 ? 1 : todos[todos.length - 1].id + 1;
+    const { todosArray } = this.state;
+    this.setLocalStorage(todosArray);
+    this.id =
+      todosArray.length === 0 ? 1 : todosArray[todosArray.length - 1].id + 1;
   }
 
   render() {
@@ -144,6 +135,7 @@ export default class App extends PureComponent {
       .length;
     const completedTodoCount = todosArray.length - activeTodoCount;
     const visibleTodos = this.filterTodos(todosArray, filter);
+
     return (
       <div className="todo-app">
         <Header
@@ -159,14 +151,15 @@ export default class App extends PureComponent {
             editTodo={this.editTodo}
           />
         </main>
-        <Footer
-          activeTodosAmount={activeTodoCount}
-          completedTodosAmount={completedTodoCount}
-          allTodosAmount={todosArray.length}
-          changeFilter={this.changeFilter}
-          filter={filter}
-          deleteCompleted={this.deleteCompletedTodo}
-        />
+        {todosArray.length > 0 && (
+          <Footer
+            activeTodosAmount={activeTodoCount}
+            completedTodosAmount={completedTodoCount}
+            changeFilter={this.changeFilter}
+            filter={filter}
+            deleteCompleted={this.deleteCompletedTodo}
+          />
+        )}
       </div>
     );
   }
