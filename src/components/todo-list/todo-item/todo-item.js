@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import "./todo-item.scss";
-import { keyCode } from "../../header/header";
+import { keyCode } from "../../../constatnts";
 
 export default class TodoItem extends PureComponent {
   state = {

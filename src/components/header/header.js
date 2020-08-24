@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import "./header.scss";
+import { keyCode } from "../../constatnts";
 
 export default class Header extends PureComponent {
   todoInputHandler = (evt) => {
@@ -45,11 +46,6 @@ export default class Header extends PureComponent {
     );
   }
 }
-
-export const keyCode = {
-  ENTER: 13,
-  ESC: 27,
-};
 
 Header.propTypes = {
   todosArray: PropTypes.array,
