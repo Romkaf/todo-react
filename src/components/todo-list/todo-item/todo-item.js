@@ -6,21 +6,18 @@ import { keyCode } from "../../header/header";
 export default class TodoItem extends PureComponent {
   state = {
     visibilityElement: "visible",
+    isEditing: false,
+    value: "",
   };
 
   onTaskDblClick = (evt) => {
-    evt.target.classList.add("hidden");
-    this.setState({ visibilityElement: "hidden" });
-    evt.target.insertAdjacentHTML(
-      "beforebegin",
-      '<input class="todo-item__task" type="text">'
-    );
-    const input = evt.target.previousElementSibling;
-    input.value = evt.target.textContent;
-    input.focus();
-    input.parentNode.classList.add("todo-item--editing");
-    input.addEventListener("blur", this.finishTodoEditing);
-    input.addEventListener("keydown", this.finishTodoEditing);
+    this.setState({
+      visibilityElement: "hidden",
+      isEditing: true,
+      value: evt.target.textContent,
+    });
+
+    evt.target.parentNode.classList.add("todo-item--editing");
   };
 
   finishTodoEditing = (evt) => {
@@ -30,26 +27,33 @@ export default class TodoItem extends PureComponent {
       evt.keyCode === keyCode.ESC
     ) {
       const input = evt.target;
-      if (this.state.visibilityElement === "visible") return;
+      if (!this.state.isEditing) return;
       const insertText =
         evt.keyCode === keyCode.ESC
           ? this.props.title
           : input.value.trim().replace(/\s+/g, " ");
-      this.setState({ visibilityElement: "visible" });
+
       if (this.deleteEmptyTask(evt, insertText)) return;
       this.props.editTodo(insertText);
       input.parentNode.classList.remove("todo-item--editing");
-      input.nextElementSibling.classList.remove("hidden");
-      input.remove();
+      this.setState({ visibilityElement: "visible", isEditing: false });
     }
   };
 
   deleteEmptyTask = (evt, insertText) => {
     if (!insertText) {
-      evt.target.parentNode.remove();
-      this.props.deleteTodo();
-      return "return";
+      try {
+        evt.target.parentNode.remove();
+        this.props.deleteTodo();
+        return "return";
+      } catch (error) {
+        return;
+      }
     }
+  };
+
+  onChangeHandler = (evt) => {
+    this.setState({ value: evt.target.value });
   };
 
   render() {
@@ -69,9 +73,20 @@ export default class TodoItem extends PureComponent {
           readOnly
         />
         <label style={visibility}>&#10003;</label>
-        <span className="todo-item__task" onDoubleClick={this.onTaskDblClick}>
-          {title}
-        </span>
+        {this.state.isEditing ? (
+          <input
+            className="todo-item__task"
+            onKeyDown={this.finishTodoEditing}
+            onBlur={this.finishTodoEditing}
+            value={this.state.value}
+            onChange={this.onChangeHandler}
+            autoFocus
+          />
+        ) : (
+          <span className="todo-item__task" onDoubleClick={this.onTaskDblClick}>
+            {title}
+          </span>
+        )}
         {/* eslint-disable-next-line */}
         <button
           className="todo-item__delete"
