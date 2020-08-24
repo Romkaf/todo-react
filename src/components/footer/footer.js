@@ -30,7 +30,6 @@ export default class Footer extends PureComponent {
 
 Footer.propTypes = {
   completedTodosAmount: PropTypes.number,
-  allTodosAmount: PropTypes.number,
   activeTodosAmount: PropTypes.number,
   changeFilter: PropTypes.func,
   filter: PropTypes.string,

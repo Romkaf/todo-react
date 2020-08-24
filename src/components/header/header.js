@@ -3,15 +3,10 @@ import PropTypes from "prop-types";
 import "./header.scss";
 
 export default class Header extends PureComponent {
-  keyEnter = 13;
-
   todoInputHandler = (evt) => {
-    const validateValue = evt.target.value.trim().replace(/\s+/g, " ");
-    if (
-      (evt.keyCode === keyCode.ENTER || evt.type === "blur") &&
-      validateValue
-    ) {
-      this.props.addTodo(validateValue);
+    if (evt.keyCode === keyCode.ENTER || evt.type === "blur") {
+      const validateValue = evt.target.value.trim().replace(/\s+/g, " ");
+      if (validateValue) this.props.addTodo(validateValue);
       evt.target.value = "";
     }
   };
@@ -57,7 +52,7 @@ export const keyCode = {
 };
 
 Header.propTypes = {
-  addTodo: PropTypes.func,
   todosArray: PropTypes.array,
+  addTodo: PropTypes.func,
   selectAll: PropTypes.func,
 };
