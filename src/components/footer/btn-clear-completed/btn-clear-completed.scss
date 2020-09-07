@@ -1,7 +1,6 @@
 @import "../../../scss/mixins.scss";
 
 .btn-clear-completed {
-  visibility: hidden;
   margin: 10px 0;
 
   @include hoverSupport {

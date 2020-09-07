@@ -1,8 +1,11 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import "./filter.scss";
+import classNames from "classnames";
 
 export default class Filter extends PureComponent {
+  // classNames = require("classnames");
+
   buttons = [
     { title: "Все", filter: "all" },
     { title: "Активные", filter: "active" },
@@ -12,11 +15,14 @@ export default class Filter extends PureComponent {
   render() {
     const { changeFilter, filter } = this.props;
     const buttons = this.buttons.map((it) => {
-      const klass = it.filter === filter ? "filter__btn--active" : "";
+      const filterBtnClass = classNames({
+        filter__btn: true,
+        "filter__btn--active": it.filter === filter,
+      });
 
       return (
         <button
-          className={`filter__btn ${klass}`}
+          className={filterBtnClass}
           type="button"
           key={it.filter}
           onClick={() => changeFilter(it.filter)}

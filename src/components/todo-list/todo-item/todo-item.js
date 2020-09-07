@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import "./todo-item.scss";
 import { keyCode } from "../../../constatnts";
+import classNames from "classnames";
 
 export default class TodoItem extends PureComponent {
   state = {
@@ -58,21 +59,25 @@ export default class TodoItem extends PureComponent {
 
   render() {
     const { title, completed, selectTodo, deleteTodo } = this.props;
-    const klass = completed === true ? "todo-item--completed" : "";
+    const itemClass = classNames({
+      "todo-item": true,
+      "todo-item--completed": completed === true,
+    });
+
+    const hiddenClass =
+      this.state.visibilityElement === "hidden" ? "hidden" : "";
     const checked = completed === true ? true : false;
-    const visibility = { visibility: this.state.visibilityElement };
 
     return (
-      <div className={`todo-item ${klass}`}>
+      <div className={itemClass}>
         <input
-          className="todo-item__choice"
+          className={`todo-item__choice ${hiddenClass}`}
           type="checkbox"
-          style={visibility}
           onClick={selectTodo}
           checked={checked}
           readOnly
         />
-        <label style={visibility}>&#10003;</label>
+        <label className={hiddenClass}>&#10003;</label>
         {this.state.isEditing ? (
           <input
             className="todo-item__task"
@@ -89,8 +94,7 @@ export default class TodoItem extends PureComponent {
         )}
         {/* eslint-disable-next-line */}
         <button
-          className="todo-item__delete"
-          style={visibility}
+          className={`todo-item__delete ${hiddenClass}`}
           onClick={deleteTodo}
         >
           &#10060;
