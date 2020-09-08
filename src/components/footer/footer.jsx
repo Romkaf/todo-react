@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import "./footer.scss";
-import Counter from "./counter/counter";
-import Filter from "./filter/filter";
-import BtnClearCompleted from "./btn-clear-completed/btn-clear-completed";
+import styles from "./footer.module.scss";
+import Counter from "./counter/counter.jsx";
+import Filter from "./filter/filter.jsx";
+import BtnClearCompleted from "./btn-clear-completed/btn-clear-completed.jsx";
 
 export default class Footer extends PureComponent {
   render() {
@@ -16,7 +16,7 @@ export default class Footer extends PureComponent {
     } = this.props;
 
     return (
-      <footer className="todo-footer">
+      <footer className={styles.footer}>
         <Counter activeTodosAmount={activeTodosAmount} />
         <Filter changeFilter={changeFilter} filter={filter} />
         <BtnClearCompleted
