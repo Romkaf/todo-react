@@ -14,13 +14,13 @@ export default class BtnClearCompleted extends Component {
 	}
 
 	render() {
-		const { completedTodosAmount, deleteCompleted } = this.props;
+		const { completedTodosAmount, onCompletedDelete } = this.props;
 		const btnClass = classNames(styles.btn, {
 			hidden: completedTodosAmount === 0,
 		});
-		console.log('render BTN!!!');
+
 		return (
-			<button className={btnClass} onClick={deleteCompleted}>
+			<button className={btnClass} onClick={onCompletedDelete}>
 				Удалить завершенные
 			</button>
 		);
@@ -29,5 +29,5 @@ export default class BtnClearCompleted extends Component {
 
 BtnClearCompleted.propTypes = {
 	completedTodosAmount: PropTypes.number,
-	deleteCompleted: PropTypes.func,
+	onCompletedDelete: PropTypes.func,
 };

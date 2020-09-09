@@ -7,13 +7,13 @@ export default class Header extends PureComponent {
 	todoInputHandler = (evt) => {
 		if (evt.keyCode === keyCode.ENTER || evt.type === 'blur') {
 			const validateValue = evt.target.value.trim().replace(/\s+/g, ' ');
-			if (validateValue) this.props.addTodo(validateValue);
+			if (validateValue) this.props.onTodoAdd(validateValue);
 			evt.target.value = '';
 		}
 	};
 
 	render() {
-		const { todosArray, selectAll } = this.props;
+		const { todosArray, onAllTodoSelect } = this.props;
 		const visibility = todosArray.length > 0 ? 'visible' : 'hidden';
 		const opacity = todosArray.every((it) => it.completed) ? 1 : 0.2;
 		const checked = todosArray.every((it) => it.completed) ? 'ckecked' : '';
@@ -25,7 +25,7 @@ export default class Header extends PureComponent {
 					className={styles.header__choiceAll}
 					id="choice-all"
 					type="checkbox"
-					onClick={selectAll}
+					onClick={onAllTodoSelect}
 					checked={checked}
 					readOnly
 				/>
@@ -49,6 +49,6 @@ export default class Header extends PureComponent {
 
 Header.propTypes = {
 	todosArray: PropTypes.arrayOf(PropTypes.object),
-	addTodo: PropTypes.func,
-	selectAll: PropTypes.func,
+	onTodoAdd: PropTypes.func,
+	onAllTodoSelect: PropTypes.func,
 };

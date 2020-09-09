@@ -36,7 +36,7 @@ export default class TodoItem extends PureComponent {
 					: input.value.trim().replace(/\s+/g, ' ');
 
 			if (this.deleteEmptyTask(evt, insertText)) return;
-			this.props.editTodo(insertText);
+			this.props.onTodoEdit(insertText);
 			input.parentNode.classList.remove(styles.item_editing);
 			this.setState({ visibilityElement: 'visible', isEditing: false });
 		}
@@ -46,7 +46,7 @@ export default class TodoItem extends PureComponent {
 		if (!insertText) {
 			try {
 				evt.target.parentNode.remove();
-				this.props.deleteTodo();
+				this.props.onTodoDelete();
 				return 'return';
 			} catch (error) {
 				return;
@@ -59,7 +59,7 @@ export default class TodoItem extends PureComponent {
 	};
 
 	render() {
-		const { title, completed, selectTodo, deleteTodo } = this.props;
+		const { title, completed, onTodoSelect, onTodoDelete } = this.props;
 		const {
 			item,
 			item_completed,
@@ -82,7 +82,7 @@ export default class TodoItem extends PureComponent {
 				<input
 					className={`${item__choice}  ${hiddenClass}`}
 					type="checkbox"
-					onClick={selectTodo}
+					onClick={onTodoSelect}
 					checked={checked}
 					readOnly
 				/>
@@ -104,7 +104,7 @@ export default class TodoItem extends PureComponent {
 				{/* eslint-disable-next-line */}
 				<button
 					className={`${item__delete} ${hiddenClass}`}
-					onClick={deleteTodo}
+					onClick={onTodoDelete}
 				>
 					&#10060;
 				</button>
@@ -116,7 +116,7 @@ export default class TodoItem extends PureComponent {
 TodoItem.propTypes = {
 	title: PropTypes.string,
 	completed: PropTypes.bool,
-	deleteTodo: PropTypes.func,
-	editTodo: PropTypes.func,
-	selectAll: PropTypes.func,
+	onTodoDelete: PropTypes.func,
+	onTodoEdit: PropTypes.func,
+	onTodoSelect: PropTypes.func,
 };
