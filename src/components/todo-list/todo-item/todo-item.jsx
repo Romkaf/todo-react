@@ -12,49 +12,41 @@ export default class TodoItem extends PureComponent {
 		value: '',
 	};
 
-	onTaskDblClick = (evt) => {
+	handleTaskDblClick = (evt) => {
 		this.setState({
 			visibilityElement: 'hidden',
 			isEditing: true,
 			value: evt.target.textContent,
 		});
-
-		evt.target.parentNode.classList.add(styles.item_editing);
 	};
 
 	finishTodoEditing = (evt) => {
-		if (
-			evt.keyCode === keyCode.ENTER ||
-			evt.type === 'blur' ||
+		const input = evt.target;
+		const insertText =
 			evt.keyCode === keyCode.ESC
-		) {
-			const input = evt.target;
-			if (!this.state.isEditing) return;
-			const insertText =
-				evt.keyCode === keyCode.ESC
-					? this.props.title
-					: input.value.trim().replace(/\s+/g, ' ');
+				? this.props.title
+				: input.value.trim().replace(/\s+/g, ' ');
 
-			if (this.deleteEmptyTask(evt, insertText)) return;
-			this.props.onTodoEdit(insertText);
-			input.parentNode.classList.remove(styles.item_editing);
-			this.setState({ visibilityElement: 'visible', isEditing: false });
-		}
-	};
-
-	deleteEmptyTask = (evt, insertText) => {
 		if (!insertText) {
-			try {
-				evt.target.parentNode.remove();
-				this.props.onTodoDelete();
-				return 'return';
-			} catch (error) {
-				return;
-			}
+			this.props.onTodoDelete();
+		} else {
+			this.props.onTodoEdit(insertText);
+		}
+
+		this.setState({ visibilityElement: 'visible', isEditing: false });
+	};
+
+	handleInputBlur = (evt) => {
+		if (evt.type === 'blur') this.finishTodoEditing(evt);
+	};
+
+	handleInputKeyDown = (evt) => {
+		if (evt.keyCode === keyCode.ENTER || evt.keyCode === keyCode.ESC) {
+			this.finishTodoEditing(evt);
 		}
 	};
 
-	onChangeHandler = (evt) => {
+	handleInputChange = (evt) => {
 		this.setState({ value: evt.target.value });
 	};
 
@@ -63,6 +55,7 @@ export default class TodoItem extends PureComponent {
 		const {
 			item,
 			item_completed,
+			item_editing,
 			item__choice,
 			item__task,
 			item__delete,
@@ -70,6 +63,7 @@ export default class TodoItem extends PureComponent {
 
 		const itemClass = classNames(item, {
 			[item_completed]: completed === true,
+			[item_editing]: this.state.isEditing === true,
 		});
 
 		const hiddenClass =
@@ -90,23 +84,25 @@ export default class TodoItem extends PureComponent {
 				{this.state.isEditing ? (
 					<input
 						className={item__task}
-						onKeyDown={this.finishTodoEditing}
-						onBlur={this.finishTodoEditing}
+						onKeyDown={this.handleInputKeyDown}
+						onBlur={this.handleInputBlur}
 						value={this.state.value}
-						onChange={this.onChangeHandler}
+						onChange={this.handleInputChange}
 						autoFocus
 					/>
 				) : (
-					<span className={item__task} onDoubleClick={this.onTaskDblClick}>
+					<span className={item__task} onDoubleClick={this.handleTaskDblClick}>
 						{title}
 					</span>
 				)}
-				{/* eslint-disable-next-line */}
+
 				<button
 					className={`${item__delete} ${hiddenClass}`}
 					onClick={onTodoDelete}
 				>
-					&#10060;
+					<span role="img" aria-label="cross">
+						&#10060;
+					</span>
 				</button>
 			</div>
 		);
