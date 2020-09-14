@@ -9,7 +9,7 @@ export default class Header extends PureComponent {
 		value: '',
 	};
 
-	addTodo = (evt) => {
+	handleValidateValue = (evt) => {
 		const validateValue = evt.target.value.trim().replace(/\s+/g, ' ');
 		if (validateValue) this.props.onTodoAdd(validateValue);
 		this.setState({ value: '' });
@@ -17,13 +17,13 @@ export default class Header extends PureComponent {
 
 	handleInputBlur = (evt) => {
 		if (evt.type === 'blur') {
-			this.addTodo(evt);
+			this.handleValidateValue(evt);
 		}
 	};
 
 	handleInputEnter = (evt) => {
 		if (evt.keyCode === keyCode.ENTER) {
-			this.addTodo(evt);
+			this.handleValidateValue(evt);
 		}
 	};
 

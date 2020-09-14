@@ -20,7 +20,7 @@ export default class TodoItem extends PureComponent {
 		});
 	};
 
-	finishTodoEditing = (evt) => {
+	handleTodoEditingComplete = (evt) => {
 		const input = evt.target;
 		const insertText =
 			evt.keyCode === keyCode.ESC
@@ -37,12 +37,14 @@ export default class TodoItem extends PureComponent {
 	};
 
 	handleInputBlur = (evt) => {
-		if (evt.type === 'blur') this.finishTodoEditing(evt);
+		if (evt.type === 'blur') {
+			this.handleTodoEditingComplete(evt);
+		}
 	};
 
 	handleInputKeyDown = (evt) => {
 		if (evt.keyCode === keyCode.ENTER || evt.keyCode === keyCode.ESC) {
-			this.finishTodoEditing(evt);
+			this.handleTodoEditingComplete(evt);
 		}
 	};
 

@@ -1,4 +1,8 @@
-export const keyCode = {
-  ENTER: 13,
-  ESC: 27,
+const keyCode = {
+	ENTER: 13,
+	ESC: 27,
 };
+
+const localStorageKey = 'todos';
+
+export { keyCode, localStorageKey };

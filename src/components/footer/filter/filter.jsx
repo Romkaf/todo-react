@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './filter.module.scss';
 import classNames from 'classnames';
 
-const Filter = (props) => {
-	const { onFilterChange, filter } = props;
+const Filter = ({ onFilterChange, filter }) => {
 	const buttons = [
 		{ title: 'Все', filter: 'all' },
 		{ title: 'Активные', filter: 'active' },

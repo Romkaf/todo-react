@@ -3,11 +3,13 @@ import Header from '../header/header.jsx';
 import TodoList from '../todo-list/todo-list.jsx';
 import Footer from '../footer/footer.jsx';
 import styles from './app.module.scss';
+import { localStorageKey } from '../../constants';
 
 export default class App extends PureComponent {
 	state = {
 		todosArray: [],
 		filter: 'all',
+		allCompleted: false,
 	};
 
 	id = 1;
@@ -85,30 +87,38 @@ export default class App extends PureComponent {
 	};
 
 	handleAllTodoSelect = () => {
-		this.setState(({ todosArray }) => {
-			let newArray;
-			if (todosArray.every((it) => it.completed === true)) {
-				newArray = todosArray.map((it) => {
-					return { ...it, completed: false };
-				});
-			} else {
-				newArray = todosArray.map((it) => {
-					return { ...it, completed: true };
-				});
-			}
+		this.setState(({ todosArray, allCompleted }) => {
+			const newArray = todosArray.map((it) => {
+				return it.completed === allCompleted
+					? { ...it, completed: !allCompleted }
+					: it;
+			});
+
 			return {
 				todosArray: newArray,
+				allCompleted: !allCompleted,
 			};
 		});
 	};
 
+	handleAllCompletedChange = () => {
+		const { todosArray } = this.state;
+		const newAllCompletetd = todosArray.every((it) => it.completed === true)
+			? true
+			: false;
+
+		this.setState({
+			allCompleted: newAllCompletetd,
+		});
+	};
+
 	setLocalStorage = (stateName) => {
-		localStorage.setItem('todos', JSON.stringify(stateName));
+		localStorage.setItem(localStorageKey, JSON.stringify(stateName));
 	};
 
 	loadLocalStorage = () => {
 		this.setState({
-			todosArray: JSON.parse(localStorage.getItem('todos')) || [],
+			todosArray: JSON.parse(localStorage.getItem(localStorageKey)) || [],
 		});
 	};
 
@@ -124,6 +134,7 @@ export default class App extends PureComponent {
 			this.id =
 				todosArray.length === 0 ? 1 : todosArray[todosArray.length - 1].id + 1;
 		}
+		this.handleAllCompletedChange();
 	}
 
 	render() {
