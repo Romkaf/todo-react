@@ -144,8 +144,11 @@ export default class App extends PureComponent {
 			this.setLocalStorage(filter, locStorKeys.filter);
 		}
 
-		if (prevState.allCompleted !== allCompleted) {
-			this.setLocalStorage(allCompleted, locStorKeys.marker);
+		if (prevState.allCompleted !== allCompleted || todosArray.length === 0) {
+			const newAllCompleted = todosArray.length > 0 ? allCompleted : false;
+
+			this.setLocalStorage(newAllCompleted, locStorKeys.marker);
+			if (todosArray.length === 0) this.setState({ allCompleted: false });
 		}
 	}
 
