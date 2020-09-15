@@ -3,6 +3,10 @@ const keyCode = {
 	ESC: 27,
 };
 
-const localStorageKey = 'todos';
+const locStorKeys = {
+	todos: 'todos',
+	filter: 'filter',
+	marker: 'allCompleted',
+};
 
-export { keyCode, localStorageKey };
+export { keyCode, locStorKeys };
