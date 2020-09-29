@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import styles from './counter.module.scss';
+import styles from './Counter.module.scss';
 
 const Counter = ({ activeTodosAmount }) => {
 	return (
@@ -10,7 +10,7 @@ const Counter = ({ activeTodosAmount }) => {
 	);
 };
 
-export default Counter;
+export default memo(Counter);
 
 Counter.propTypes = {
 	activeTodosAmount: PropTypes.number,

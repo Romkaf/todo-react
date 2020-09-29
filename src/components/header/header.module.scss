@@ -1,4 +1,5 @@
 @import '../../scss/variables.scss';
+@import '../../scss/mixins.scss';
 
 .header__title {
 	position: absolute;
@@ -24,6 +25,10 @@
 	opacity: 0.2;
 	font-size: 40px;
 	transform: rotate(-90deg);
+
+	@include hoverSupport {
+		cursor: pointer;
+	}
 
 	&_selected {
 		opacity: 1;

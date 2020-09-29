@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import styles from './filter.module.scss';
+import styles from './Filter.module.scss';
 import classNames from 'classnames';
 
 const Filter = ({ onFilterChange, filter }) => {
+	const { filter: classFilter, filter__btn, filter__btn_active } = styles;
+
 	const buttons = [
 		{ title: 'Все', filter: 'all' },
 		{ title: 'Активные', filter: 'active' },
@@ -15,8 +17,8 @@ const Filter = ({ onFilterChange, filter }) => {
 	};
 
 	const buttonsArray = buttons.map((it) => {
-		const className = classNames(styles.filter__btn, {
-			[styles.filter__btn_active]: it.filter === filter,
+		const className = classNames(filter__btn, {
+			[filter__btn_active]: it.filter === filter,
 		});
 
 		return (
@@ -32,10 +34,10 @@ const Filter = ({ onFilterChange, filter }) => {
 		);
 	});
 
-	return <div className="filter">{buttonsArray}</div>;
+	return <div className={classFilter}>{buttonsArray}</div>;
 };
 
-export default Filter;
+export default memo(Filter);
 
 Filter.propTypes = {
 	onFilterChange: PropTypes.func,

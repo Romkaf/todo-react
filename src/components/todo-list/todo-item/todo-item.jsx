@@ -1,16 +1,23 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './todo-item.module.scss';
-import '../../../scss/scaffolding.scss';
+import styles from './Todo-item.module.scss';
 import { keyCode } from '../../../constants';
 import classNames from 'classnames';
 
-export default class TodoItem extends PureComponent {
+export default class TodoItem extends Component {
 	state = {
 		visibilityElement: 'visible',
 		isEditing: false,
 		value: '',
 	};
+
+	shouldComponentUpdate(nextProps, nextState) {
+		return (
+			this.props.completed !== nextProps.completed ||
+			this.state.isEditing !== nextState.isEditing ||
+			this.state.value !== nextState.value
+		);
+	}
 
 	handleTaskDblClick = (evt) => {
 		this.setState({
@@ -54,6 +61,7 @@ export default class TodoItem extends PureComponent {
 
 	render() {
 		const { title, completed, onTodoSelect, onTodoDelete } = this.props;
+		const { visibilityElement, isEditing, value } = this.state;
 		const {
 			item,
 			item_completed,
@@ -63,32 +71,38 @@ export default class TodoItem extends PureComponent {
 			item__delete,
 		} = styles;
 
-		const itemClass = classNames(item, {
-			[item_completed]: completed === true,
-			[item_editing]: this.state.isEditing === true,
-		});
+		const setClasses = (it) => {
+			switch (it) {
+				case item:
+					return classNames(item, {
+						[item_completed]: completed,
+						[item_editing]: isEditing,
+					});
+				default:
+					return classNames(it, {
+						hidden: visibilityElement === 'hidden',
+					});
+			}
+		};
 
-		const hiddenClass =
-			this.state.visibilityElement === 'hidden' ? 'hidden' : '';
-
-		const checked = completed === true ? true : false;
+		const checked = completed ? true : false;
 
 		return (
-			<div className={itemClass}>
+			<div className={setClasses(item)}>
 				<input
-					className={`${item__choice}  ${hiddenClass}`}
+					className={setClasses(item__choice)}
 					type="checkbox"
 					onClick={onTodoSelect}
 					checked={checked}
 					readOnly
 				/>
-				<label className={hiddenClass}>&#10003;</label>
-				{this.state.isEditing ? (
+				<label className={setClasses()}>&#10003;</label>
+				{isEditing ? (
 					<input
 						className={item__task}
 						onKeyDown={this.handleInputKeyDown}
 						onBlur={this.handleInputBlur}
-						value={this.state.value}
+						value={value}
 						onChange={this.handleInputChange}
 						autoFocus
 					/>
@@ -98,10 +112,7 @@ export default class TodoItem extends PureComponent {
 					</span>
 				)}
 
-				<button
-					className={`${item__delete} ${hiddenClass}`}
-					onClick={onTodoDelete}
-				>
+				<button className={setClasses(item__delete)} onClick={onTodoDelete}>
 					<span role="img" aria-label="cross">
 						&#10060;
 					</span>

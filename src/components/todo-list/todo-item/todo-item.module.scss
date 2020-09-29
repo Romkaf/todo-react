@@ -42,6 +42,10 @@
 		opacity: 0;
 		transform: translateY(-50%);
 
+		@include hoverSupport {
+			cursor: pointer;
+		}
+
 		& + label {
 			position: absolute;
 			top: 50%;

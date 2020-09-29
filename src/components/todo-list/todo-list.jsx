@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoItem from './todo-item/todo-item.jsx';
+import TodoItem from './Todo-item';
 import PropTypes from 'prop-types';
 
 const TodoList = ({ todosArray, onTodoSelect, onTodoDelete, onTodoEdit }) => {

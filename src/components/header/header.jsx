@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './header.module.scss';
+import styles from './Header.module.scss';
 import { keyCode } from '../../constants';
 import classNames from 'classnames';
 
-export default class Header extends PureComponent {
+export default class Header extends Component {
 	state = {
 		value: '',
 	};

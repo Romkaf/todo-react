@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './footer.module.scss';
-import Counter from './counter/counter.jsx';
-import Filter from './filter/filter.jsx';
-import BtnClearCompleted from './btn-clear-completed/btn-clear-completed.jsx';
+import styles from './Footer.module.scss';
+import Counter from './Counter';
+import Filter from './Filter';
+import BtnClearCompleted from './Btn-clear-completed';
 
-const Footer = (props) => {
-	const {
-		activeTodosAmount,
-		completedTodosAmount,
-		onFilterChange,
-		filter,
-		onCompletedTodoDelete,
-	} = props;
-
+const Footer = ({
+	activeTodosAmount,
+	completedTodosAmount,
+	onFilterChange,
+	filter,
+	onCompletedTodoDelete,
+}) => {
 	return (
 		<footer className={styles.footer}>
 			<Counter activeTodosAmount={activeTodosAmount} />

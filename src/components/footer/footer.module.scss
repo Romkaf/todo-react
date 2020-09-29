@@ -1,21 +1,21 @@
-@import "../../scss/variables.scss";
+@import '../../scss/variables.scss';
 
 .footer {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 50px;
-  color: $grey;
-  box-shadow: 0 1px 1px $light-black, 0 8px 0 -3px $dark-white,
-    0 9px 1px -3px $light-black, 0 16px 0 -6px $dark-white,
-    0 17px 2px -6px $light-black;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	min-height: 50px;
+	color: $grey;
+	box-shadow: 0 1px 1px $light-black, 0 8px 0 -3px $dark-white,
+		0 9px 1px -3px $light-black, 0 16px 0 -6px $dark-white,
+		0 17px 2px -6px $light-black;
 
-  & button {
-    color: inherit;
-    font: inherit;
-  }
+	& button {
+		color: inherit;
+		font: inherit;
+	}
 
-  @media (max-width: 650px) {
-    flex-direction: column;
-  }
+	@media (max-width: 650px) {
+		flex-direction: column;
+	}
 }

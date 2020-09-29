@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './btn-clear-completed.module.scss';
+import styles from './Btn-clear-completed.module.scss';
 import classNames from 'classnames';
 
 export default class BtnClearCompleted extends Component {

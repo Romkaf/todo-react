@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
-import Header from '../header/header.jsx';
-import TodoList from '../todo-list/todo-list.jsx';
-import Footer from '../footer/footer.jsx';
-import styles from './app.module.scss';
-import { locStorKeys } from '../../constants';
+import Header from '../Header';
+import TodoList from '../Todo-list';
+import Footer from '../Footer';
+import styles from './App.module.scss';
+import { locStorKey } from '../../constants';
+import '../../scss/scaffolding.scss';
 
 export default class App extends PureComponent {
 	state = {
@@ -44,6 +45,7 @@ export default class App extends PureComponent {
 	handleTodoAdd = (text) => {
 		this.setState({
 			todosArray: [...this.state.todosArray, this.createTodo(text)],
+			allCompleted: false,
 		});
 	};
 
@@ -59,6 +61,7 @@ export default class App extends PureComponent {
 		this.setState(({ todosArray }) => {
 			return {
 				todosArray: todosArray.filter((it) => !it.completed),
+				allCompleted: false,
 			};
 		});
 	};
@@ -89,71 +92,65 @@ export default class App extends PureComponent {
 	};
 
 	handleAllTodosSelect = () => {
-		this.setState(({ todosArray, allCompleted }) => {
-			const newArray = todosArray.map((it) => {
-				return it.completed === allCompleted
-					? { ...it, completed: !allCompleted }
-					: it;
-			});
-
-			return {
-				todosArray: newArray,
-				allCompleted: !allCompleted,
-			};
+		const { todosArray, allCompleted } = this.state;
+		this.setState({
+			todosArray: todosArray.map((it) => ({ ...it, completed: !allCompleted })),
+			allCompleted: !allCompleted,
 		});
 	};
+
+	// handleAllTodosSelect = () => {
+	// 	const { todosArray, allCompleted } = this.state;
+	// 	this.setState({
+	// 		todosArray: todosArray.map((it) => {
+	// 			return it.completed === allCompleted
+	// 				? { ...it, completed: !allCompleted }
+	// 				: it;
+	// 		}),
+	// 		allCompleted: !allCompleted,
+	// 	});
+	// };
 
 	handleAllCompletedChange = () => {
 		this.setState(({ todosArray }) => {
-			const newAllCompleted = todosArray.every((it) => it.completed === true)
-				? true
-				: false;
-
 			return {
-				allCompleted: newAllCompleted,
+				allCompleted: todosArray.every((it) => it.completed),
 			};
 		});
 	};
 
-	setLocalStorage = (stateName, key) => {
-		localStorage.setItem(key, JSON.stringify(stateName));
+	setLocalStorage = (state, key) => {
+		localStorage.setItem(key, JSON.stringify(state));
 	};
 
 	loadLocalStorage = () => {
+		const { todosArray, filter, allCompleted } = JSON.parse(
+			localStorage.getItem('state'),
+		);
+
 		this.setState({
-			todosArray: JSON.parse(localStorage.getItem(locStorKeys.todos)) || [],
-			filter: JSON.parse(localStorage.getItem(locStorKeys.filter)) || 'all',
-			allCompleted: JSON.parse(localStorage.getItem(locStorKeys.marker)),
+			todosArray: todosArray || [],
+			filter: filter || 'all',
+			allCompleted,
 		});
 	};
 
 	componentDidMount() {
-		this.loadLocalStorage();
+		if (JSON.parse(localStorage.getItem('state'))) {
+			this.loadLocalStorage();
+		}
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		const { todosArray, filter, allCompleted } = this.state;
+	componentDidUpdate(prevState) {
+		const { todosArray } = this.state;
 
-		if (prevState.todosArray !== todosArray) {
-			this.setLocalStorage(todosArray, locStorKeys.todos);
-			this.id =
-				todosArray.length === 0 ? 1 : todosArray[todosArray.length - 1].id + 1;
-		}
-
-		if (prevState.filter !== filter) {
-			this.setLocalStorage(filter, locStorKeys.filter);
-		}
-
-		if (prevState.allCompleted !== allCompleted || todosArray.length === 0) {
-			const newAllCompleted = todosArray.length > 0 ? allCompleted : false;
-
-			this.setLocalStorage(newAllCompleted, locStorKeys.marker);
-			if (todosArray.length === 0) this.setState({ allCompleted: false });
-		}
+		this.setLocalStorage(this.state, locStorKey);
+		this.id =
+			todosArray.length === 0 ? 1 : todosArray[todosArray.length - 1].id + 1;
 	}
 
 	render() {
-		const { todosArray, filter } = this.state;
+		const { todosArray, filter, allCompleted } = this.state;
 		const activeTodoCount = todosArray.filter((it) => it.completed === false)
 			.length;
 		const completedTodoCount = todosArray.length - activeTodoCount;
@@ -165,6 +162,7 @@ export default class App extends PureComponent {
 					onTodoAdd={this.handleTodoAdd}
 					todosArray={todosArray}
 					onAllTodoSelect={this.handleAllTodosSelect}
+					marker={allCompleted}
 				/>
 				<main>
 					<TodoList
