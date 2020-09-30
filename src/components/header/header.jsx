@@ -39,7 +39,7 @@ export default class Header extends Component {
 		} = styles;
 		const { todosArray, onAllTodoSelect } = this.props;
 		const className = classNames(header__choiceAll, {
-			hidden: todosArray.length === 0,
+			hidden: !todosArray.length,
 			[header__choiceAll_selected]: todosArray.every((it) => it.completed),
 		});
 

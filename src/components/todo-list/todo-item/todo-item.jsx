@@ -71,32 +71,27 @@ export default class TodoItem extends Component {
 			item__delete,
 		} = styles;
 
-		const setClasses = (it) => {
-			switch (it) {
-				case item:
-					return classNames(item, {
-						[item_completed]: completed,
-						[item_editing]: isEditing,
-					});
-				default:
-					return classNames(it, {
-						hidden: visibilityElement === 'hidden',
-					});
-			}
-		};
+		const itemClass = classNames(item, {
+			[item_completed]: completed,
+			[item_editing]: isEditing,
+		});
 
-		const checked = completed ? true : false;
+		const hiddenClass = { hidden: visibilityElement === 'hidden' };
+
+		const checkboxClass = classNames(item__choice, hiddenClass);
+		const crossClass = classNames(item__delete, hiddenClass);
+		const labelClass = classNames(hiddenClass);
 
 		return (
-			<div className={setClasses(item)}>
+			<div className={itemClass}>
 				<input
-					className={setClasses(item__choice)}
+					className={checkboxClass}
 					type="checkbox"
 					onClick={onTodoSelect}
-					checked={checked}
+					checked={completed}
 					readOnly
 				/>
-				<label className={setClasses()}>&#10003;</label>
+				<label className={labelClass}>&#10003;</label>
 				{isEditing ? (
 					<input
 						className={item__task}
@@ -112,7 +107,7 @@ export default class TodoItem extends Component {
 					</span>
 				)}
 
-				<button className={setClasses(item__delete)} onClick={onTodoDelete}>
+				<button className={crossClass} onClick={onTodoDelete}>
 					<span role="img" aria-label="cross">
 						&#10060;
 					</span>

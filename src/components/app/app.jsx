@@ -99,18 +99,6 @@ export default class App extends PureComponent {
 		});
 	};
 
-	// handleAllTodosSelect = () => {
-	// 	const { todosArray, allCompleted } = this.state;
-	// 	this.setState({
-	// 		todosArray: todosArray.map((it) => {
-	// 			return it.completed === allCompleted
-	// 				? { ...it, completed: !allCompleted }
-	// 				: it;
-	// 		}),
-	// 		allCompleted: !allCompleted,
-	// 	});
-	// };
-
 	handleAllCompletedChange = () => {
 		this.setState(({ todosArray }) => {
 			return {
