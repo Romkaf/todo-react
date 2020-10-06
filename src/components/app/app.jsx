@@ -81,12 +81,10 @@ export default class App extends PureComponent {
 	handleTodoEdit = (id, text) => {
 		this.setState(({ todosArray }) => {
 			return {
-				todosArray: todosArray.map((it) => {
-					if (it.id === id) {
-						it.title = text;
-					}
-					return it;
-				}),
+				todosArray: todosArray.map((it) => ({
+					...it,
+					title: it.id === id ? text : it.title,
+				})),
 			};
 		});
 	};
@@ -112,24 +110,25 @@ export default class App extends PureComponent {
 	};
 
 	loadLocalStorage = () => {
-		const { todosArray, filter, allCompleted } = JSON.parse(
-			localStorage.getItem('state'),
-		);
+		const state = JSON.parse(localStorage.getItem('state')) || {
+			todosArray: [],
+			filter: 'all',
+			allCompleted: false,
+		};
+		const { todosArray, filter, allCompleted } = state;
 
 		this.setState({
-			todosArray: todosArray || [],
-			filter: filter || 'all',
+			todosArray,
+			filter,
 			allCompleted,
 		});
 	};
 
 	componentDidMount() {
-		if (JSON.parse(localStorage.getItem('state'))) {
-			this.loadLocalStorage();
-		}
+		this.loadLocalStorage();
 	}
 
-	componentDidUpdate(prevState) {
+	componentDidUpdate() {
 		const { todosArray } = this.state;
 
 		this.setLocalStorage(this.state, locStorKey);
